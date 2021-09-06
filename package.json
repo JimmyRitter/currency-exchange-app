@@ -1,0 +1,14 @@
+{
+  "name": "currency-exchange-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "yarn workspace backend start & yarn workspace frontend start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "workspaces": ["backend", "frontend"]
+}
