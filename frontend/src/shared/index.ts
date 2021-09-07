@@ -1,0 +1,1 @@
+export type { Rate } from './Rate.type'
