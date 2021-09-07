@@ -1,6 +1,7 @@
-import cors from 'cors';
-import dotenv from 'dotenv';
-import express from 'express';
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import ExchangeRoute from "./routes";
 
 // configuring dotenv to access private API key
 dotenv.config();
@@ -9,9 +10,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// configure services routes
+app.use('/exchange', ExchangeRoute);
+
 // backend should not be initiated without Exchange Rates API key properly defined
 if (!process.env.EXCHANGE_RATES_API_KEY) {
-  throw Error('Exchange Rates API Key must be specified within the environment file.');
+  throw Error("Exchange Rates API Key must be specified within the environment file.");
 }
 
 const port = 3001;
