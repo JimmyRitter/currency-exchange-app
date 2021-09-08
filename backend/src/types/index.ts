@@ -1,1 +1,1 @@
-export { ILatestRatesEndpoint } from "./exchange.type";
+export type { ILatestRatesEndpoint } from "./exchange.type";
