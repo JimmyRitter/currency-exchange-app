@@ -1,8 +1,9 @@
 import React from 'react';
-import { Rate } from "../../shared";
+import { ExchangeData, Rate } from "../../shared";
 
 interface IProps {
   rates: Rate[];
+  submitExchange: (formData: ExchangeData) => void;
 }
 
 interface IState {
@@ -45,6 +46,7 @@ class ExchangeContainer extends React.Component<IProps, IState> {
     this.handleChangeSourceCurrency = this.handleChangeSourceCurrency.bind(this);
     this.handleChangeInputValue = this.handleChangeInputValue.bind(this);
     this.validateEnteredValue = this.validateEnteredValue.bind(this);
+    this.onSubmitExchangeForm = this.onSubmitExchangeForm.bind(this);
   }
 
   componentDidMount() {
@@ -123,9 +125,24 @@ class ExchangeContainer extends React.Component<IProps, IState> {
     return `1 ${sourceSymbol} = ${targetSymbol} ${+exchangeValue}`;
   }
 
+  onSubmitExchangeForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData: ExchangeData = {
+      source: {
+        currency: this.state.source.rate.symbol,
+        amount: +this.state.source.inputValue,
+      },
+      target: {
+        currency: this.state.target.rate.symbol,
+        amount: this.state.totalExchange
+      }
+    }
+    this.props.submitExchange(formData);
+  }
+
   render() {
     return (
-      <>
+      <form onSubmit={this.onSubmitExchangeForm}>
         <h3>Exchange</h3>
         You send:
         <input type="text"
@@ -172,7 +189,13 @@ class ExchangeContainer extends React.Component<IProps, IState> {
             </option>
           ))}
         </select>
-      </>
+
+        <br />
+
+        <button type={"submit"}>
+          Exchange now
+        </button>
+      </form>
     );
   }
 }

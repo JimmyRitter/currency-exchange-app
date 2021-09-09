@@ -1,17 +1,19 @@
 import React from 'react';
 import { WalletContainer, ExchangeContainer } from "./index";
 import { ExchangeService, LatestRates } from "../api-client";
-import { Rate } from "../shared";
+import { ExchangeData, Rate } from "../shared";
 
 interface IState {
   rates: Rate[];
+  exchangeData?: ExchangeData;
 }
 
 class MainContainer extends React.Component<{}, IState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      rates: []
+      rates: [],
+      exchangeData: undefined,
     }
   }
 
@@ -25,7 +27,7 @@ class MainContainer extends React.Component<{}, IState> {
     return ratesList;
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     ExchangeService.getLatestRates()
       .then((response) => {
         const rates = this.castRatesAPIObjectToList(response.data);
@@ -36,13 +38,24 @@ class MainContainer extends React.Component<{}, IState> {
       });
   }
 
+  onSubmitExchange = (formData: ExchangeData) => {
+    this.setState({
+      ...this.state,
+      exchangeData: formData
+    })
+  }
+  //
+  // onUpdateWalletValues = (sourceAmount: number, targetAmount: number) => {
+  //
+  // }
+
   render() {
     return (
       <>
         {this.state.rates.length > 0 && (
           <>
-            <WalletContainer rates={this.state.rates} />
-            <ExchangeContainer rates={this.state.rates} />
+            <WalletContainer rates={this.state.rates} exchangeValues={this.state.exchangeData!} />
+            <ExchangeContainer rates={this.state.rates} submitExchange={this.onSubmitExchange} />
           </>
         )}
       </>

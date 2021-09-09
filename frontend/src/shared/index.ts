@@ -1,1 +1,1 @@
-export type { Rate } from './Rate.type'
+export type { Rate, ExchangeData } from './Rate.type'
