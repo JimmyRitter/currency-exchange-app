@@ -1,5 +1,7 @@
 import React from 'react';
 import { ExchangeData, Rate } from "../../shared";
+import { SectionTitle, PrimaryActionButton, ExchangeForm } from "../StyledComponents"
+import { ExchangeSingle } from "./index";
 
 interface IProps {
   rates: Rate[];
@@ -44,8 +46,11 @@ class ExchangeContainer extends React.Component<IProps, IState> {
     }
 
     this.handleChangeSourceCurrency = this.handleChangeSourceCurrency.bind(this);
-    this.handleChangeInputValue = this.handleChangeInputValue.bind(this);
+    this.handleChangeTargetCurrency = this.handleChangeTargetCurrency.bind(this);
     this.validateEnteredValue = this.validateEnteredValue.bind(this);
+    this.updateConversionRateAndExchangeValue = this.updateConversionRateAndExchangeValue.bind(this);
+    this.handleChangeInputValue = this.handleChangeInputValue.bind(this);
+    this.getExchangePriceLabel = this.getExchangePriceLabel.bind(this);
     this.onSubmitExchangeForm = this.onSubmitExchangeForm.bind(this);
   }
 
@@ -53,7 +58,11 @@ class ExchangeContainer extends React.Component<IProps, IState> {
     this.updateConversionRateAndExchangeValue();
   }
 
-  handleChangeSourceCurrency = (event: any): void => {
+  /**
+   * Handle the change of the source currency dropdown option
+   * @param event
+   */
+  handleChangeSourceCurrency = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const selectedCurrency = event.target.value;
     const rateRef = this.props.rates.find((e) => e.symbol === selectedCurrency)!;
     this.setState({
@@ -65,7 +74,11 @@ class ExchangeContainer extends React.Component<IProps, IState> {
     }, () => this.updateConversionRateAndExchangeValue());
   }
 
-  handleChangeTargetCurrency = (event: any): void => {
+  /**
+   * Handle the change of the target currency dropdown option
+   * @param event
+   */
+  handleChangeTargetCurrency = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const selectedCurrency = event.target.value;
     const rateRef = this.props.rates.find((e) => e.symbol === selectedCurrency)!;
     this.setState({
@@ -85,8 +98,13 @@ class ExchangeContainer extends React.Component<IProps, IState> {
     return !!+amount || amount === '';
   }
 
+  /**
+   * Used to calculate the conversion rate based on the price difference between currencies and total to be exchanged
+   * E.g.:
+   * - Conversion Rate is: 1 Euro = 0.85 Dollar, so  = 1.176470
+   * - Total exchange is the conversionRate * amount to be exchanged.
+   */
   updateConversionRateAndExchangeValue = (): void => {
-
     const sourceRatePrice = this.state.source.rate.price;
     const targetRatePrice = this.state.target.rate.price;
     const inputValue = this.state.source.inputValue;
@@ -117,14 +135,20 @@ class ExchangeContainer extends React.Component<IProps, IState> {
     }, () => this.updateConversionRateAndExchangeValue());
   }
 
-  getCurrencyExchangeValue = (): string => {
+  /**
+   * Display the conversion price to the user in a friendly way.
+   */
+  getExchangePriceLabel = (): string => {
     const sourceSymbol = this.state.source.rate.symbol;
     const targetSymbol = this.state.target.rate.symbol;
     const exchangeValue = this.state.conversionRate.toFixed(6);
-
     return `1 ${sourceSymbol} = ${targetSymbol} ${+exchangeValue}`;
   }
 
+  /**
+   * Handle the submit exchange form submission
+   * @param event
+   */
   onSubmitExchangeForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData: ExchangeData = {
@@ -142,60 +166,35 @@ class ExchangeContainer extends React.Component<IProps, IState> {
 
   render() {
     return (
-      <form onSubmit={this.onSubmitExchangeForm}>
-        <h3>Exchange</h3>
-        You send:
-        <input type="text"
-               onChange={this.handleChangeInputValue}
-               value={this.state.source.inputValue}
+      <ExchangeForm onSubmit={this.onSubmitExchangeForm}>
+        <SectionTitle>Exchange</SectionTitle>
+
+        {/* Source component (from where the amount will be sent) */}
+        <ExchangeSingle
+          inputType={"source"}
+          options={this.props.rates}
+          changeSelectOption={this.handleChangeSourceCurrency}
+          changeInputValue={this.handleChangeInputValue}
+          inputValue={this.state.source.inputValue}
+          selectValue={this.state.source.rate.symbol}
+          selectedOtherCurrency={this.state.target.rate.symbol}
         />
-        <select
-          onChange={this.handleChangeSourceCurrency}
-          value={this.state.source.rate.symbol}
-        >
-          {this.props.rates.map((rate) => (
-            <option
-              key={rate.symbol}
-              disabled={rate.symbol === this.state.target.rate.symbol}
-              value={rate.symbol}
-            >
-              {rate.symbol}
-            </option>
-          ))}
-        </select>
 
-        <br />
+        {this.getExchangePriceLabel()}
 
-        {this.getCurrencyExchangeValue()}
-
-        <br />
-
-        You receive:
-        <input type="text"
-               disabled
-               value={this.state.totalExchange}
+        <ExchangeSingle
+          inputType={"target"}
+          options={this.props.rates}
+          changeSelectOption={this.handleChangeTargetCurrency}
+          inputValue={this.state.totalExchange.toString()}
+          selectValue={this.state.target.rate.symbol}
+          selectedOtherCurrency={this.state.target.rate.symbol}
         />
-        <select
-          onChange={this.handleChangeTargetCurrency}
-          value={this.state.target.rate.symbol}
-        >
-          {this.props.rates.map((rate) => (
-            <option
-              key={rate.symbol}
-              disabled={rate.symbol === this.state.source.rate.symbol}
-              value={rate.symbol}
-            >
-              {rate.symbol}
-            </option>
-          ))}
-        </select>
 
-        <br />
-
-        <button type={"submit"}>
+        <PrimaryActionButton type={"submit"}>
           Exchange now
-        </button>
-      </form>
+        </PrimaryActionButton>
+      </ExchangeForm>
     );
   }
 }

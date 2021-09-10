@@ -15,18 +15,13 @@ class MainContainer extends React.Component<{}, IState> {
       rates: [],
       exchangeData: undefined,
     }
+    this.castRatesAPIObjectToList = this.castRatesAPIObjectToList.bind(this);
+    this.onSubmitExchange = this.onSubmitExchange.bind(this);
   }
 
-  castRatesAPIObjectToList = (list: LatestRates) => {
-    const ratesList: Rate[] = [];
-
-    Object.entries(list.rates).forEach((item) => {
-      ratesList.push({ symbol: item[0], price: item[1] });
-    });
-
-    return ratesList;
-  }
-
+  /**
+   * Lifecycle method that runs after the component has been rendered to the DOM
+   */
   componentDidMount = () => {
     ExchangeService.getLatestRates()
       .then((response) => {
@@ -38,30 +33,41 @@ class MainContainer extends React.Component<{}, IState> {
       });
   }
 
+  /**
+   * Convert the Rates API Object to a list to be easier to work with
+   * @param list
+   */
+  castRatesAPIObjectToList = (list: LatestRates) => {
+    const ratesList: Rate[] = [];
+
+    Object.entries(list.rates).forEach((item) => {
+      ratesList.push({ symbol: item[0], price: item[1] });
+    });
+
+    return ratesList;
+  }
+
+  /**
+   * Handle the exchange values form submit
+   * @param formData
+   */
   onSubmitExchange = (formData: ExchangeData) => {
     this.setState({
       ...this.state,
       exchangeData: formData
     })
   }
-  //
-  // onUpdateWalletValues = (sourceAmount: number, targetAmount: number) => {
-  //
-  // }
 
   render() {
     return (
-      <>
-        {this.state.rates.length > 0 && (
-          <>
-            <WalletContainer rates={this.state.rates} exchangeValues={this.state.exchangeData!} />
-            <ExchangeContainer rates={this.state.rates} submitExchange={this.onSubmitExchange} />
-          </>
-        )}
-      </>
+      this.state.rates.length > 0 && (
+        <>
+          <WalletContainer rates={this.state.rates} exchangeValues={this.state.exchangeData!} />
+          <ExchangeContainer rates={this.state.rates} submitExchange={this.onSubmitExchange} />
+        </>
+      )
     );
   }
-
 }
 
 export default MainContainer;

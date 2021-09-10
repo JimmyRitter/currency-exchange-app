@@ -1,6 +1,7 @@
 import React from 'react';
 import { WalletItem, WalletSingle } from "./index";
 import { Rate, ExchangeData } from "../../shared";
+import { WalletWrapper, SectionTitle, WalletSectionWrapper } from "../StyledComponents"
 
 interface IState {
   currentWallet: WalletItem[];
@@ -31,6 +32,9 @@ class WalletContainer extends React.Component<IProps, IState> {
     this.state = {
       currentWallet: initialWalletState,
     };
+
+    this.exchangeAmounts = this.exchangeAmounts.bind(this);
+    this.validateSufficientFunds = this.validateSufficientFunds.bind(this);
   }
 
   componentDidUpdate = (prevProps: IProps) => {
@@ -40,11 +44,14 @@ class WalletContainer extends React.Component<IProps, IState> {
         console.log('display "insufficient funds" error');
         return;
       }
-      this.exchangeCurrencies();
+      this.exchangeAmounts();
     }
   }
 
-  exchangeCurrencies = () => {
+  /**
+   * Update the wallet values based on the exchange
+   */
+  exchangeAmounts = () => {
     // get the currency and amounts to be added and subtracted
     const { currency: sourceCurrency, amount: sourceAmount } = this.props.exchangeValues.source;
     const { currency: targetCurrency, amount: targetAmount } = this.props.exchangeValues.target;
@@ -64,6 +71,9 @@ class WalletContainer extends React.Component<IProps, IState> {
     });
   }
 
+  /**
+   * Validate if there are sufficient funds to perform the exchange
+   */
   validateSufficientFunds = () => {
     const { currency, amount } = this.props.exchangeValues.source;
     const walletItem = this.state.currentWallet.find((x) => x.currency === currency)!;
@@ -72,15 +82,16 @@ class WalletContainer extends React.Component<IProps, IState> {
 
   render() {
     return (
-      <>
-        <h2>Your wallet!</h2>
-        {this.state.currentWallet.map((item) => (
-          <WalletSingle key={item.currency} walletItem={item} />
-        ))}
-      </>
+      <WalletSectionWrapper>
+        <SectionTitle>Your wallet!</SectionTitle>
+        <WalletWrapper>
+          {this.state.currentWallet.map((item) => (
+            <WalletSingle key={item.currency} walletItem={item} />
+          ))}
+        </WalletWrapper>
+      </WalletSectionWrapper>
     );
   }
-
 }
 
 export default WalletContainer;
