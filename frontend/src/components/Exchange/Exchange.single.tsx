@@ -1,5 +1,6 @@
 import React from 'react';
 import { Rate } from "../../shared";
+import { ExchangeInputSelect, ExchangeSingleWrapper } from '../StyledComponents'
 
 interface IProps {
   inputType: "source" | "target";
@@ -13,30 +14,33 @@ interface IProps {
 
 const ExchangeSingle = (props: IProps) => {
   return (
-    <>
+    <ExchangeSingleWrapper>
       <span>
         {props.inputType === "source" ? "You send:" : "You receive:"}
       </span>
-      <input type="text"
-             disabled={props.inputType === "target"}
-             onChange={props.changeInputValue}
-             value={props.inputValue}
-      />
-      <select
-        onChange={props.changeSelectOption}
-        value={props.selectValue}
-      >
-        {props.options.map((rate) => (
-          <option
-            key={rate.symbol}
-            disabled={rate.symbol === props.selectedOtherCurrency}
-            value={rate.symbol}
-          >
-            {rate.symbol}
-          </option>
-        ))}
-      </select>
-    </>
+      <ExchangeInputSelect>
+        <input type="text"
+              disabled={props.inputType === "target"}
+              placeholder="0"
+              onChange={props.changeInputValue}
+              value={props.inputValue}
+        />
+        <select
+          onChange={props.changeSelectOption}
+          value={props.selectValue}
+        >
+          {props.options.map((rate) => (
+            <option
+              key={rate.symbol}
+              disabled={rate.symbol === props.selectedOtherCurrency}
+              value={rate.symbol}
+            >
+              {rate.symbol}
+            </option>
+          ))}
+        </select>
+      </ExchangeInputSelect>
+    </ExchangeSingleWrapper>
   );
 }
 

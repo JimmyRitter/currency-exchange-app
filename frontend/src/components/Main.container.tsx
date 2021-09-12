@@ -62,8 +62,14 @@ class MainContainer extends React.Component<{}, IState> {
     return (
       this.state.rates.length > 0 && (
         <>
-          <WalletContainer rates={this.state.rates} exchangeValues={this.state.exchangeData!} />
-          <ExchangeContainer rates={this.state.rates} submitExchange={this.onSubmitExchange} />
+          <WalletContainer
+            rates={this.state.rates}
+            exchangeValues={this.state.exchangeData!}
+          />
+          <ExchangeContainer
+            rates={this.state.rates}
+            submitExchange={this.onSubmitExchange}
+          />
         </>
       )
     );

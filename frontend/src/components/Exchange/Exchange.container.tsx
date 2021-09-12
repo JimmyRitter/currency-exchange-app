@@ -1,6 +1,11 @@
 import React from 'react';
 import { ExchangeData, Rate } from "../../shared";
-import { SectionTitle, PrimaryActionButton, ExchangeForm } from "../StyledComponents"
+import { SectionTitle,
+  PrimaryActionButton,
+  ExchangeForm,
+  ExchangeInputsWrapper,
+  ExchangeRate,
+} from "../StyledComponents"
 import { ExchangeSingle } from "./index";
 
 interface IProps {
@@ -169,27 +174,31 @@ class ExchangeContainer extends React.Component<IProps, IState> {
       <ExchangeForm onSubmit={this.onSubmitExchangeForm}>
         <SectionTitle>Exchange</SectionTitle>
 
-        {/* Source component (from where the amount will be sent) */}
-        <ExchangeSingle
-          inputType={"source"}
-          options={this.props.rates}
-          changeSelectOption={this.handleChangeSourceCurrency}
-          changeInputValue={this.handleChangeInputValue}
-          inputValue={this.state.source.inputValue}
-          selectValue={this.state.source.rate.symbol}
-          selectedOtherCurrency={this.state.target.rate.symbol}
-        />
+        <ExchangeInputsWrapper>
+          {/* Source component (from where the amount will be sent) */}
+          <ExchangeSingle
+            inputType={"source"}
+            options={this.props.rates}
+            changeSelectOption={this.handleChangeSourceCurrency}
+            changeInputValue={this.handleChangeInputValue}
+            inputValue={this.state.source.inputValue}
+            selectValue={this.state.source.rate.symbol}
+            selectedOtherCurrency={this.state.target.rate.symbol}
+          />
 
-        {this.getExchangePriceLabel()}
+          <ExchangeRate>
+            {this.getExchangePriceLabel()}
+          </ExchangeRate>
 
-        <ExchangeSingle
-          inputType={"target"}
-          options={this.props.rates}
-          changeSelectOption={this.handleChangeTargetCurrency}
-          inputValue={this.state.totalExchange.toString()}
-          selectValue={this.state.target.rate.symbol}
-          selectedOtherCurrency={this.state.target.rate.symbol}
-        />
+          <ExchangeSingle
+            inputType={"target"}
+            options={this.props.rates}
+            changeSelectOption={this.handleChangeTargetCurrency}
+            inputValue={this.state.totalExchange.toString()}
+            selectValue={this.state.target.rate.symbol}
+            selectedOtherCurrency={this.state.target.rate.symbol}
+          />
+        </ExchangeInputsWrapper>
 
         <PrimaryActionButton type={"submit"}>
           Exchange now

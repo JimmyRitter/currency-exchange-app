@@ -56,6 +56,7 @@ export const WalletItemWrapper = styled.div`
 `
 
 export const SectionTitle = styled.h2`
+  margin-top: 5px;
   color: #134074;
   text-shadow: 1px 1px #0B2545;
 `
@@ -65,10 +66,39 @@ export const ExchangeForm = styled.form`
   flex-direction: column;
 `
 
+export const ExchangeInputsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+export const ExchangeRate = styled.span`
+  border: solid 1px green;
+  border-radius: 15px;
+  background-color: green;
+  padding: 5px 10px;
+  margin: 0 5px;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 0.3);
+  align-self: center;
+`
+
+export const ExchangeSingleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const ExchangeInputSelect = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`
+
 export const PrimaryActionButton = styled.button`
+  color: white;
   font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border: 2px solid palevioletred;
-  border-radius: 3px;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 0.3);
+  background-color:rgba(0, 0, 0, 0.15);
+  margin-top: 10px;
+  align-self: center;
 `
