@@ -11,6 +11,7 @@ import { ExchangeSingle } from "./index";
 interface IProps {
   rates: Rate[];
   submitExchange: (formData: ExchangeData) => void;
+  error: string;
 }
 
 interface IState {
@@ -200,6 +201,11 @@ class ExchangeContainer extends React.Component<IProps, IState> {
           />
         </ExchangeInputsWrapper>
 
+
+        {this.props.error !== '' && (
+          <span>{this.props.error}</span>
+        )}
+        
         <PrimaryActionButton type={"submit"}>
           Exchange now
         </PrimaryActionButton>
