@@ -9,7 +9,8 @@ interface IState {
 
 interface IProps {
   rates: Rate[];
-  exchangeValues: ExchangeData
+  exchangeValues: ExchangeData;
+  insuficientFunds: (value: boolean) => void;
 }
 
 class WalletContainer extends React.Component<IProps, IState> {
@@ -38,10 +39,11 @@ class WalletContainer extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate = (prevProps: IProps) => {
+    this.props.insuficientFunds(false);
     // ensure that the exchange will happen just once
     if (prevProps.exchangeValues !== this.props.exchangeValues) {
       if (!this.validateSufficientFunds()) {
-        console.log('display "insufficient funds" error');
+        this.props.insuficientFunds(true);
         return;
       }
       this.exchangeAmounts();

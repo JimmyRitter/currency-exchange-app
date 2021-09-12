@@ -6,6 +6,7 @@ import { ExchangeData, Rate } from "../shared";
 interface IState {
   rates: Rate[];
   exchangeData?: ExchangeData;
+  error: string;
 }
 
 class MainContainer extends React.Component<{}, IState> {
@@ -14,9 +15,11 @@ class MainContainer extends React.Component<{}, IState> {
     this.state = {
       rates: [],
       exchangeData: undefined,
+      error: '',
     }
     this.castRatesAPIObjectToList = this.castRatesAPIObjectToList.bind(this);
     this.onSubmitExchange = this.onSubmitExchange.bind(this);
+    this.onError = this.onError.bind(this);
   }
 
   /**
@@ -54,8 +57,22 @@ class MainContainer extends React.Component<{}, IState> {
   onSubmitExchange = (formData: ExchangeData) => {
     this.setState({
       ...this.state,
+      error: '',
       exchangeData: formData
     })
+  }
+
+  /**
+   * Display an error message if there are no suficient funds
+   * @param insuficientFunds 
+   */
+  onError = (insuficientFunds: boolean) => {
+    if (insuficientFunds) {
+      this.setState({
+        ...this.state,
+        error: 'You do not have enough funds to perform this operation.'
+      });
+    }
   }
 
   render() {
@@ -65,10 +82,12 @@ class MainContainer extends React.Component<{}, IState> {
           <WalletContainer
             rates={this.state.rates}
             exchangeValues={this.state.exchangeData!}
+            insuficientFunds={this.onError}
           />
           <ExchangeContainer
             rates={this.state.rates}
             submitExchange={this.onSubmitExchange}
+            error={this.state.error}
           />
         </>
       )
