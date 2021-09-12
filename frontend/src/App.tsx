@@ -1,12 +1,12 @@
 import React from 'react';
-import './App.css';
-import MainContainer from "./components/Main.container";
+import { MainContainer } from "./components";
+import { AppWrapper } from "./components/StyledComponents";
 
 const App = () => {
   return (
-    <div className="App">
-      <MainContainer></MainContainer>
-    </div>
+    <AppWrapper>
+      <MainContainer />
+    </AppWrapper>
   );
 }
 
