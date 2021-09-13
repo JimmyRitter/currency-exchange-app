@@ -5,7 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "yarn workspace backend start & yarn workspace frontend start"
+    "start": "yarn workspace backend start & yarn workspace frontend start",
+    "test": "yarn workspace backend test"
   },
   "keywords": [],
   "author": "",
