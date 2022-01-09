@@ -5,11 +5,11 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "yarn workspace backend start & yarn workspace frontend start",
-    "test": "yarn workspace backend test"
+    "start": "yarn workspace api start & yarn workspace frontend start",
+    "test": "yarn workspace api test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "workspaces": ["backend", "frontend"]
+  "workspaces": ["api", "frontend"]
 }
